@@ -129,6 +129,20 @@ const getToken = (req, res, next) => {
         });
 };
 
+/* Auth */
+const auth = (req, res, next) => {
+    const token = req.body.token || req.query.token || req.headers['token'];
+    if (token) {
+        // obviously this is not secure...
+        next();
+    } else {
+        res.status(403).send({
+            "success": false,
+            "message": "No token provided"
+        });
+    }
+};
+
 module.exports = {
     "getAllFiles": getAllFiles,
     "getSingleFile": getSingleFile,
@@ -136,5 +150,6 @@ module.exports = {
     "updateFile": updateFile,
     "removeFile": removeFile,
     "displayFileByID": displayFileByID,
-    "getToken": getToken
+    "getToken": getToken,
+    "auth": auth
 };
