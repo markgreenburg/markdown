@@ -11,10 +11,13 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "express": "~4.14.0",
+    "express-session": "^1.15.0",
     "hbs": "~4.0.1",
+    "jsonwebtoken": "^7.2.1",
     "marked": "^0.3.6",
     "morgan": "~1.7.0",
     "pg-promise": "^5.5.4",
+    "rand-token": "^0.3.0",
     "serve-favicon": "~2.3.0"
   }
 }

@@ -1,5 +1,6 @@
 'use strict';
 const marked = require('marked');
+const user = require('./objects/user');
 
 /* Set up Postgres connector */
 const promise = require('bluebird');
@@ -100,7 +101,7 @@ const removeFile = (req, res, next) => {
     const id = parseInt(req.params.id);
     const query = "DELETE FROM files WHERE id=$1";
     db.none(query, id)
-        .then (() => {
+        .then(() => {
             res.status(200)
                 .json({
                     "status": "success",
@@ -114,11 +115,26 @@ const removeFile = (req, res, next) => {
  * End SQL queries
  */
 
+/* Construct user and save to memory */
+const getToken = (req, res, next) => {
+    const username = req.body.username;
+    let newUser = user.user(username);
+    newUser.setToken();
+    const token = newUser.getToken();
+    res.status(200)
+        .json({
+            "status": "success",
+            "message": "Token generated",
+            "token": token
+        });
+};
+
 module.exports = {
     "getAllFiles": getAllFiles,
     "getSingleFile": getSingleFile,
     "createFile": createFile,
     "updateFile": updateFile,
     "removeFile": removeFile,
-    "displayFileByID": displayFileByID
+    "displayFileByID": displayFileByID,
+    "getToken": getToken
 };
