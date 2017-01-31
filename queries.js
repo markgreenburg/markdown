@@ -35,6 +35,7 @@ const getAllFiles = (req, res, next) => {
         .catch((err) => next(err));
 };
 
+/* Refactor display and getSingle with Callback - DRY */
 const getSingleFile = (req, res, next) => {
     const fileID = parseInt(req.params.id);
     db.one('SELECT * FROM files WHERE id = $1', fileID)
