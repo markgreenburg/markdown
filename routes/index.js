@@ -1,9 +1,18 @@
-var express = require('express');
-var router = express.Router();
+'use strict';
+const express = require('express');
+const router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const db = require('../queries');
+
+/* API Routes */
+router.get('/api/files', db.getAllFiles);
+router.get('/api/files/:id', db.getSingleFile);
+router.post('/api/files', db.createFile);
+router.put('/api/files/:id', db.updateFile);
+router.delete('/api/files/:id', db.removeFile);
+
+/* File Display for search by ID*/
+router.get('/files/:id/display', db.displayFileByID);
+
 
 module.exports = router;
