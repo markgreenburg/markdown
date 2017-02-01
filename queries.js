@@ -1,6 +1,7 @@
 'use strict';
 const marked = require('marked');
-const user = require('./objects/user');
+const user = require('./models/user');
+const file = require('./models/file');
 
 /* Set up Postgres connector */
 const promise = require('bluebird');
@@ -51,14 +52,15 @@ const getSingleFile = (req, res, next) => {
         .catch((err) => next(err));
 };
 
-const displayFileByID = (req, res, next) => {
-    const id = parseInt(req.params.id);
-    db.one('SELECT * FROM files WHERE id = $1', id)
-        .then((data) => {
-            res.status(200)
-                .render("displayHtml.hbs", data);
-        })
-        .catch((err) => next(err));
+const displayFileByID = (req, res) => {
+    file.file(parseInt(req.params.id), (file) => {
+        const renderObject = {
+            "title": file.getTitle(),
+            "html": file.getHtml()
+        };
+        res.status(200)
+            .render("displayHtml.hbs", renderObject);
+    });
 };
 
 const createFile = (req, res, next) => {
@@ -130,6 +132,7 @@ const getToken = (req, res, next) => {
 };
 
 /* Auth */
+// To-Do: actually do auth...
 const auth = (req, res, next) => {
     const token = req.body.token || req.query.token || req.headers['token'];
     if (token) {
